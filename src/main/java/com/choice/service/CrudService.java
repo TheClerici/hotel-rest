@@ -1,17 +1,18 @@
 package com.choice.service;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.http.ResponseEntity;
 
 public interface CrudService<T> {
 
-    List<T> list();
+    ResponseEntity<?> getHotels();
 
-    T create(T t);
+    ResponseEntity<?> getHotel(int id);
 
-    Optional<T> get(int id);
+    ResponseEntity<?> createHotel(T t);
 
-    void update(T t, int id);
+    ResponseEntity<?> updateHotel(T t, int id);
 
-    void delete(int id);
+    ResponseEntity deleteHotels();
+
+    ResponseEntity<?> deleteHotel(int id);
 }

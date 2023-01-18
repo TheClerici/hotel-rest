@@ -1,13 +1,12 @@
 package com.choice.controller;
 
 import com.choice.model.Hotel;
+import com.choice.repository.HotelRepository;
 import com.choice.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -16,9 +15,33 @@ public class HotelController {
     @Autowired
     private HotelService hotelService;
 
+    @GetMapping("/hotels")
+    public ResponseEntity<?> getHotels() {
+        return hotelService.getHotels();
+    }
+
+    @GetMapping("/hotels/{hotelId}")
+    public ResponseEntity<?> getHotel(@PathVariable int hotelId) {
+        return hotelService.getHotel(hotelId);
+    }
+
     @PostMapping("/hotel")
     public ResponseEntity<?> createHotel(@RequestBody Hotel hotel) {
-        int id = hotelService.create(hotel);
-        return ResponseEntity.ok().body("New Hotel saved with ID: " + id);
+        return hotelService.createHotel(hotel);
+    }
+
+    @PutMapping("/hotels/{hotelId}")
+    public HttpEntity<?> updateHotel(@PathVariable int hotelId, @RequestBody Hotel hotel) {
+        return hotelService.updateHotel(hotel, hotelId);
+    }
+
+    @DeleteMapping("/hotels")
+    public ResponseEntity<?> deleteHotels() {
+        return hotelService.deleteHotels();
+    }
+
+    @DeleteMapping("/hotels/{hotelId}")
+    public ResponseEntity<?> deleteHotel(@PathVariable int hotelId) {
+        return hotelService.deleteHotel(hotelId);
     }
 }
