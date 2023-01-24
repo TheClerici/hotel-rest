@@ -1,19 +1,18 @@
 package com.choice.controller;
 
 import com.choice.model.Hotel;
-import com.choice.repository.HotelRepository;
 import com.choice.service.HotelService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class HotelController {
 
-    @Autowired
-    private HotelService hotelService;
+    private final HotelService hotelService;
 
     @GetMapping("/hotels")
     public ResponseEntity<?> getHotels() {
