@@ -1,61 +1,23 @@
 package com.choice.model;
 
-public class Hotel {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-    private int hotelId;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Hotel{
+    private Long hotelId;
     private String name;
     private String address;
-    private int rating;
+    private Integer rating;
 
-    public Hotel() {
-    }
-
-    public Hotel(int hotelId, String name, String address, int rating) {
-        this.hotelId = hotelId;
+    public Hotel(String name, String address, int rating) {
         this.name = name;
         this.address = address;
         this.rating = rating;
-    }
-
-    public int getHotelId() {
-        return hotelId;
-    }
-
-    public void setHotelId(int hotelId) {
-        this.hotelId = hotelId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    @Override
-    public String toString() {
-        return "Hotel{" +
-                "hotelId=" + hotelId +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", rating='" + rating + '\'' +
-                '}';
     }
 }
