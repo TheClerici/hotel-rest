@@ -16,6 +16,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class HotelClientController {
     private final HotelClientService hotelClientService;
 
+    @GetMapping("/hello")
+    public ResponseEntity<?> hello() {
+        return ResponseEntity.ok("Hello tomcat");
+    }
+
     @GetMapping("/hotels/{hotelId}")
     public ResponseEntity<?> getHotel(@PathVariable Long hotelId) {
 
