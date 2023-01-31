@@ -18,7 +18,7 @@ public class HotelClientController {
 
     @GetMapping("/hello")
     public ResponseEntity<?> hello() {
-        return ResponseEntity.ok("Hello tomcat");
+        return ResponseEntity.ok("Hello tomcat <>");
     }
 
     @GetMapping("/hotels/{hotelId}")
@@ -32,11 +32,19 @@ public class HotelClientController {
 
     @GetMapping(value = "/hotels", params = {"pageNumber", "pageSize", "nameFilter"})
     public ResponseEntity<?> getHotels(
-            @RequestParam(required = false, defaultValue = "0") int pageNumber,
-            @RequestParam(required = false, defaultValue = "5") int pageSize,
+            @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
+            @RequestParam(required = false, defaultValue = "5") Integer pageSize,
             @RequestParam(required = false, defaultValue = "") String nameFilter) {
 
         GetAllHotelsWithFilteringResponse response = hotelClientService.getAllHotelsWithFiltering(pageNumber, pageSize, nameFilter);
+
+        return ResponseEntity.ok(response.getHotelInfo().stream().toList());
+    }
+
+    @GetMapping(value = "/hotels/default")
+    public ResponseEntity<?> getHotelsDefault() {
+
+        GetAllHotelsWithFilteringResponse response = hotelClientService.getAllHotelsWithFiltering(0, 10, "");
 
         return ResponseEntity.ok(response.getHotelInfo().stream());
     }
@@ -88,6 +96,7 @@ public class HotelClientController {
         return ResponseEntity.ok(response.getServiceStatus());
     }
 
+    //otra clase
     public void checkHotel(Hotel hotel) {
         if (hotel.getName() == null && hotel.getAddress() == null && hotel.getRating() == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hotel has no body. Please fill!");
