@@ -1,6 +1,7 @@
 package com.choice.controller;
 
 import com.choice.model.Hotel;
+import com.choice.service.ErrorService;
 import com.choice.service.HotelClientService;
 import com.choice.wsdl.*;
 import lombok.RequiredArgsConstructor;
@@ -15,17 +16,15 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class HotelClientController {
     private final HotelClientService hotelClientService;
+    private final ErrorService errorService;
 
-    @GetMapping("/hello")
-    public ResponseEntity<?> hello() {
-        return ResponseEntity.ok("Hello tomcat <>");
-    }
+    //TODO: Response entity sin <?>
 
     @GetMapping("/hotels/{hotelId}")
     public ResponseEntity<?> getHotel(@PathVariable Long hotelId) {
 
         GetHotelByIdResponse response = hotelClientService.getHotelById(hotelId);
-        checkStatus(response.getServiceStatus());
+        errorService.checkStatus(response.getServiceStatus());
 
         return ResponseEntity.ok(response.getHotelInfo());
     }
@@ -41,20 +40,12 @@ public class HotelClientController {
         return ResponseEntity.ok(response.getHotelInfo().stream().toList());
     }
 
-    @GetMapping(value = "/hotels/default")
-    public ResponseEntity<?> getHotelsDefault() {
-
-        GetAllHotelsWithFilteringResponse response = hotelClientService.getAllHotelsWithFiltering(0, 10, "");
-
-        return ResponseEntity.ok(response.getHotelInfo().stream());
-    }
-
     @PostMapping("/hotel")
     public ResponseEntity<?> createHotel(@RequestBody Hotel hotel) {
 
-        checkHotel(hotel);
+        errorService.checkHotel(hotel);
         AddHotelResponse response = hotelClientService.addHotel(hotel.getName(), hotel.getAddress(), hotel.getRating());
-        checkStatus(response.getServiceStatus());
+        errorService.checkStatus(response.getServiceStatus());
 
         return ResponseEntity.ok(response.getHotelInfo());
     }
@@ -62,9 +53,9 @@ public class HotelClientController {
     @PutMapping("/hotels/{hotelId}")
     public HttpEntity<?> updateHotel(@PathVariable Long hotelId, @RequestBody Hotel hotel) {
 
-        checkHotel(hotel);
+        errorService.checkHotel(hotel);
         UpdateHotelResponse response = hotelClientService.updateHotel(hotelId, hotel);
-        checkStatus(response.getServiceStatus());
+        errorService.checkStatus(response.getServiceStatus());
 
         return ResponseEntity.ok(response.getHotelInfo());
     }
@@ -73,7 +64,7 @@ public class HotelClientController {
     public ResponseEntity<?> deleteHotel(@PathVariable Long hotelId) {
 
         DeleteHotelResponse response = hotelClientService.deleteHotel(hotelId);
-        checkStatus(response.getServiceStatus());
+        errorService.checkStatus(response.getServiceStatus());
 
         return ResponseEntity.ok(response.getServiceStatus());
     }
@@ -82,7 +73,7 @@ public class HotelClientController {
     public ResponseEntity<?> addAmenity(@PathVariable Long hotelId, @PathVariable Long amenityId) {
 
         AddAmenityResponse response = hotelClientService.addAmenity(amenityId, hotelId);
-        checkStatus(response.getServiceStatus());
+        errorService.checkStatus(response.getServiceStatus());
 
         return ResponseEntity.ok(response.getAmenityInfo());
     }
@@ -91,31 +82,9 @@ public class HotelClientController {
     public ResponseEntity<?> deleteAmenity(@PathVariable Long hotelId, @PathVariable Long amenityId) {
 
         DeleteAmenityResponse response = hotelClientService.deleteAmenity(amenityId, hotelId);
-        checkStatus(response.getServiceStatus());
+        errorService.checkStatus(response.getServiceStatus());
 
         return ResponseEntity.ok(response.getServiceStatus());
-    }
-
-    //otra clase
-    public void checkHotel(Hotel hotel) {
-        if (hotel.getName() == null && hotel.getAddress() == null && hotel.getRating() == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hotel has no body. Please fill!");
-        else if (hotel.getName() == null || hotel.getName().length() < 1)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hotel has no Name. Please fill!");
-        else if (hotel.getAddress() == null || hotel.getAddress().length() < 1)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hotel has no Address. Please fill!");
-        else if (hotel.getRating() == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hotel has no Rating. Please fill!");
-
-        if (hotel.getRating() < 0 || hotel.getRating() > 5)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hotel Rating should be between 0 and 5");
-    }
-
-    public void checkStatus(ServiceStatus serviceStatus){
-        if (serviceStatus.getStatusCode().equals("BAD_REQUEST"))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, serviceStatus.getMessage());
-        if (serviceStatus.getStatusCode().equals("NOT_FOUND"))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, serviceStatus.getMessage());
     }
 }
 
