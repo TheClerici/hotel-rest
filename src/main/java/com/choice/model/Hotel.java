@@ -15,7 +15,7 @@ public class Hotel{
     private String address;
     private Integer rating;
 
-    public Hotel(String name, String address, int rating) {
+    public Hotel(String name, String address, Integer rating) {
         this.name = name;
         this.address = address;
         this.rating = rating;

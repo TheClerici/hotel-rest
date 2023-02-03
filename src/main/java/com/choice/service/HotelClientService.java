@@ -17,23 +17,19 @@ public class HotelClientService extends WebServiceGatewaySupport {
     }
 
     public GetAllHotelsWithFilteringResponse getAllHotelsWithFiltering(Integer pageNumber, Integer pageSize, String nameFilter) {
-
         GetAllHotelsWithFilteringRequest request = new GetAllHotelsWithFilteringRequest();
         request.setPageNumber(pageNumber);
         request.setPageSize(pageSize);
         request.setNameFilter(nameFilter);
-
         return (GetAllHotelsWithFilteringResponse) getWebServiceTemplate().marshalSendAndReceive(
                 request, new SoapActionCallback("http://localhost:9090/soapws/getAllHotelsWithFilteringRequest"));
     }
 
     public AddHotelResponse addHotel(String name, String address, Integer rating) {
-
         AddHotelRequest request = new AddHotelRequest();
         request.setName(name);
         request.setAddress(address);
         request.setRating(rating);
-
         return (AddHotelResponse) getWebServiceTemplate().marshalSendAndReceive(
                 request, new SoapActionCallback("http://localhost:9090/soapws/addHotelRequest"));
     }
@@ -51,6 +47,7 @@ public class HotelClientService extends WebServiceGatewaySupport {
         return (UpdateHotelResponse) getWebServiceTemplate().marshalSendAndReceive(
                 request, new SoapActionCallback("http://localhost:9090/soapws/updateHotelRequest"));
     }
+
     public DeleteHotelResponse deleteHotel(Long hotelId) {
         DeleteHotelRequest request = new DeleteHotelRequest();
         request.setHotelId(hotelId);
