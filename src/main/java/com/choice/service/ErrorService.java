@@ -27,5 +27,7 @@ public class ErrorService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, serviceStatus.getMessage());
         if (serviceStatus.getStatusCode().equals("NOT_FOUND"))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, serviceStatus.getMessage());
+        if (serviceStatus.getStatusCode().equals("INTERNAL_SERVER_ERROR"))
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, serviceStatus.getMessage());
     }
 }

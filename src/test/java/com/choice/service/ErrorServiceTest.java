@@ -98,4 +98,18 @@ public class ErrorServiceTest {
             assertEquals("New Not Found", e.getReason());
         }
     }
+
+    @Test
+    public void statusShouldThrowInternalServerError() {
+        ServiceStatus serviceStatus = new ServiceStatus();
+        serviceStatus.setStatusCode("INTERNAL_SERVER_ERROR");
+        serviceStatus.setMessage("New Internal Server Error");
+        try {
+            errorService.checkStatus(serviceStatus);
+            fail();
+        } catch (ResponseStatusException e) {
+            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, e.getStatus());
+            assertEquals("New Internal Server Error", e.getReason());
+        }
+    }
 }
